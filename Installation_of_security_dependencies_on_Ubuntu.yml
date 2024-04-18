@@ -1,0 +1,20 @@
+---
+- name: Actualizar los paquetes de seguridad en Ubuntu
+  hosts: Maquinas_Ubuntu
+  become: yes  # Ejecuta las tareas como root
+
+  tasks:
+    - name: Asegurar que unattended-upgrades esté instalado
+      ansible.builtin.apt:
+        name: unattended-upgrades
+        state: present
+        update_cache: yes
+
+    - name: Ejecutar unattended-upgrade para actualizar los paquetes de seguridad
+      ansible.builtin.command:
+        cmd: unattended-upgrade
+      register: result
+
+    - name: Mostrar el resultado de unattended-upgrade
+      ansible.builtin.debug:
+        var: result.stdout_lines
