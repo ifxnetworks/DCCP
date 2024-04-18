@@ -1,0 +1,23 @@
+---
+- name: Actualizaciones de seguridad para todos los hosts
+  hosts: all
+  become: yes
+  tasks:
+    - name: Aplicar actualizaciones de seguridad automáticamente en Debian, Ubuntu y Kali Linux
+      ansible.builtin.command:
+        cmd: unattended-upgrade -d
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "Kali"
+
+    - name: Instalar actualizaciones de seguridad en CentOS/RHEL 7
+      yum:
+        name: '*'
+        security: yes
+        state: latest
+      when: ansible_distribution_major_version == '7' and (ansible_os_family == "RedHat")
+
+    - name: Instalar actualizaciones de seguridad en CentOS/RHEL 8 y RHEL 9
+      dnf:
+        name: '*'
+        security: yes
+        state: latest
+      when: (ansible_distribution_major_version == '8' or ansible_distribution_major_version == '9') and (ansible_os_family == "RedHat")
