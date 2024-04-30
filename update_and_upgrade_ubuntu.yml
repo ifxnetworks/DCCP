@@ -1,0 +1,13 @@
+---
+- name: Actualizar todos los paquetes en servidores Ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: Actualizar la lista de paquetes
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600  # Cache válida por una hora
+
+    - name: Realizar una actualización completa
+      ansible.builtin.apt:
+        upgrade: dist
